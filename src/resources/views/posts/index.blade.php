@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
     <style>
         input[type="button"],
         .trash-area,
@@ -29,6 +30,7 @@
                     </tr>
                     </thead>
                     <tbody class="tr_lists">
+
                     @foreach ($posts as $post)
                         <tr id="tr_{{$post->id}}" class="@if($post->complete_flag == 1) bg-success  @endif">
                             <td><input type="checkbox" name="task-done" id="checkbox_{{$post->id}}" onChange="checkChange( {{$post->id}} )" @checked($post->complete_flag == 1) ></td>
@@ -37,20 +39,26 @@
                             <td><span class="trash-area float-end" onClick="goToTrash({{$post->id}})"><i class="fas fa-trash fa-2xl"></i></span></td>
                         </tr>
                     @endforeach
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <script>
         function createTask() {
+
             const task = $("#task-input").val();
+
             console.log(task);
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $.ajax({
                 type: 'post',
                 data: {
@@ -60,12 +68,13 @@
                 url: '/create'
             })
                 .done(function(data){
-                    console.log(data.post);
+                    // console.log(data.post);
+
                     $("#task-input").val('');
-                    // $('tbody.tr_lists').empty();
+
                     for (let i = 0; i < data.post.length; i++) {
                         const element = data.post[i];
-                        console.log(element);
+                        // console.log(element);
                         var el = '';
                         el+= '<tr id="tr_'+element.id+'" class="">';
                         el+= '<td><input type="checkbox" name="task-done" id="checkbox_'+element.id+'" onChange="checkChange('+element.id+')"></td>';
@@ -77,17 +86,21 @@
                     }
                 })
                 .fail(function(data){
-                    console.log(data);
+                    // console.log(data);
                     alert("error!");
                 });
         }
+
         function goToTrash(id) {
+
             console.log(id);
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $.ajax({
                 type: 'post',
                 data: {
@@ -97,15 +110,15 @@
                 url: '/softdelete'
             })
                 .done(function(data){
-                    //json = JSON.parse(data);
-                    console.log(data);
+                    // console.log(data);
                     $('#tr_'+id).remove();
                 })
                 .fail(function(data){
-                    console.log(data);
+                    // console.log(data);
                     alert("error!");
                 });
         }
+
         function checkChange(id) {
 
             var is_checked = $('#checkbox_'+id).prop("checked");
@@ -126,8 +139,7 @@
                 url: '/check/change'
             })
                 .done(function(data){
-                    //json = JSON.parse(data);
-                    console.log(data);
+                    // console.log(data);
                     if(data == 1){
                         $('#tr_'+id).addClass('bg-success');
                     }else{
@@ -135,7 +147,7 @@
                     }
                 })
                 .fail(function(data){
-                    console.log(data);
+                    // console.log(data);
                     alert("error!");
                 });
         }

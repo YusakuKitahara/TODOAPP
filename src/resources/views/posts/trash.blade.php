@@ -1,11 +1,13 @@
 @extends('layouts.app')
 @section('content')
+
     <style>
-        .trash-area,
+        .restore-area,
         .body-area {
             cursor: pointer;
         }
-        .trash-area:hover {
+
+        .restore-area:hover {
             opacity: 0.5;
         }
     </style>
@@ -28,7 +30,7 @@
 
                                 <td class="w-50"><span class="body-area">{{$post->text}}</span></td>
                                 <td><span class="date-area">{{$post->create_time}}</span></td>
-                                <td><span class="trash-area float-end" onClick="restore({{$post->id}})"><i class="fas fa-undo fa-2xl"></i></span>
+                                <td><span class="restore-area float-end" onClick="restore({{$post->id}})"><i class="fas fa-undo fa-2xl"></i></span>
                                 </td>
 
                             </tr>
@@ -46,15 +48,19 @@
             </div>
         </div>
     </div>
+
     <script>
         // $(function(){
         function restore(id) {
+
             console.log(id);
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $.ajax({
                 type: 'post',
                 data: {
@@ -64,14 +70,15 @@
                 url: '/restore'
             })
                 .done(function(data){
-                    console.log(data);
+                    // console.log(data);
                     $('#tr_'+id).remove();
                 })
                 .fail(function(data){
-                    console.log(data);
+                    // console.log(data);
                     alert("error!");
                 });
         }
+
         function emptyTrash() {
             if(window.confirm('本当に実行しますか？')) {
                 return true;

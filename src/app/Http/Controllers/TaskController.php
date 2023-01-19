@@ -8,7 +8,7 @@ use App\Models\Folder;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(int $id)
     {
 //        return 'hello, world.';
 
@@ -16,6 +16,7 @@ class TaskController extends Controller
 
         return view('tasks/index', [
             'folders' => $folders,
+            'current_folder_id' => $id,
         ]);
     }
 }

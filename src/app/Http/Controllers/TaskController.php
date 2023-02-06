@@ -9,8 +9,7 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-    public function index(int $id)
-    {
+    public function index(int $id) {
         // すべてのフォルダを取得
         $folders = Folder::all();
 
@@ -24,6 +23,13 @@ class TaskController extends Controller
             'folders' => $folders,
             'current_folder_id' => $id,
             'tasks' => $tasks,
+        ]);
+    }
+
+    public function showCreateForm(int $id) {
+
+        return view('tasks/create', [
+            'folder_id' => $id,
         ]);
     }
 }

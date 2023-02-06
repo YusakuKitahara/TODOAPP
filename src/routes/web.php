@@ -13,12 +13,9 @@ use App\Http\Controllers\TaskController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/folders/{id}/tasks','App\Http\Controllers\TaskController@index')->name('tasks.index');
 
-// Auth::routes();
+Route::get('/folders/create', 'App\Http\Controllers\FolderController@showCreateForm')->name('folders.create');
+Route::post('/folders/create', 'App\Http\Controllers\FolderController@create');
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Folder;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Folder $folder)
     {
-        $user = Auth::user();
+        $folders = Auth::user()->folders()->get();
+        $firstFolder = $folders->first();
 
-        $folder = $user->folders()->first();
+        $tasks = Task::getFirstFolderTasks();
 
-        if (is_null($folder)) {
+        if (is_null($folders)) {
             return view('home');
         }
 
-        return redirect()->route('tasks.index', [
-            'id' => $folder->id,
+        return view('tasks.index', [
+            'folder' => $firstFolder->id,
+            'folders' => $folders,
+            'current_folder_id' => $firstFolder->id,
+            'tasks' => $tasks,
         ]);
     }
 }
